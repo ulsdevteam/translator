@@ -83,6 +83,9 @@ class LocaleFileListbuilderHandler extends ListbuilderHandler {
 
 		$session = $request->getSession();
 		$userLocale = $session->getSessionVar('currentLocale');
+		if ($userLocale === $this->locale) {
+			$userLocale = MASTER_LOCALE;
+		}
 
 		$cellProvider = new LocaleFileListbuilderGridCellProvider($this->locale, $userLocale);
 		// Key column

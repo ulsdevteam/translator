@@ -60,6 +60,9 @@ class MiscTranslationFileGridHandler extends BaseLocaleFileGridHandler {
 
 		$session = $request->getSession();
 		$userLocale = $session->getSessionVar('currentLocale');
+		if ($userLocale === $this->locale) {
+			$userLocale = MASTER_LOCALE;
+		}
 
 		$templateMgr = TemplateManager::getManager($request);
 		$templateMgr->assign(array(
