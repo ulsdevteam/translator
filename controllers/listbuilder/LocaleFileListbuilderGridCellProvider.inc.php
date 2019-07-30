@@ -19,13 +19,17 @@ class LocaleFileListbuilderGridCellProvider extends GridCellProvider {
 	/** @var string The locale code for the locale being translated */
 	var $locale;
 
+	/** @var string The locale code for the locale of the current user */
+	var $referenceLocale;
+
 	/**
 	 * Constructor
 	 * @param $locale string The locale being translated
 	 */
-	function __construct($locale) {
+	function __construct($locale, $referenceLocale) {
 		parent::__construct();
 		$this->locale = $locale;
+		$this->referenceLocale = $referenceLocale;
 	}
 
 	//
@@ -50,9 +54,9 @@ class LocaleFileListbuilderGridCellProvider extends GridCellProvider {
 			case 'value':
 				$allLocales = PKPLocale::getAllLocales();
 				return array(
-					'referenceLocale' => MASTER_LOCALE,
-					'referenceLocaleName' => $allLocales[MASTER_LOCALE],
-					'reference' => isset($data[MASTER_LOCALE])?$data[MASTER_LOCALE]:'',
+					'referenceLocale' => $this->referenceLocale,
+					'referenceLocaleName' => $allLocales[$this->referenceLocale],
+					'reference' => isset($data[$this->referenceLocale])?$data[$this->referenceLocale]:'',
 					'translationLocale' => $this->locale,
 					'translationLocaleName' => $allLocales[$this->locale],
 					'translation' => isset($data[$this->locale])?$data[$this->locale]:'',

@@ -81,7 +81,10 @@ class LocaleFileListbuilderHandler extends ListbuilderHandler {
 
 		self::$plugin->import('controllers.listbuilder.LocaleFileListbuilderGridCellProvider');
 
-		$cellProvider = new LocaleFileListbuilderGridCellProvider($this->locale);
+		$session = $request->getSession();
+		$userLocale = $session->getSessionVar('currentLocale');
+
+		$cellProvider = new LocaleFileListbuilderGridCellProvider($this->locale, $userLocale);
 		// Key column
 		$this->addColumn(new ListbuilderGridColumn(
 			$this, 'key', 'plugins.generic.translator.localeKey',
@@ -106,12 +109,14 @@ class LocaleFileListbuilderHandler extends ListbuilderHandler {
 	 */
 	function loadData($request) {
 		import('lib.pkp.classes.file.EditableLocaleFile');
-		$referenceLocaleContents = EditableLocaleFile::load(str_replace($this->locale, MASTER_LOCALE, $this->filename));
+		$session = $request->getSession();
+		$userLocale = $session->getSessionVar('currentLocale');
+		$referenceLocaleContents = EditableLocaleFile::load(str_replace($this->locale, $userLocale, $this->filename));
 		$localeContents = file_exists($this->filename)?EditableLocaleFile::load($this->filename):array();
 
 		$returner = array();
 		foreach ($referenceLocaleContents as $key => $value) {
-			$returner[$key][MASTER_LOCALE] = $value;
+			$returner[$key][$userLocale] = $value;
 		}
 		foreach ($localeContents as $key => $value) {
 			$returner[$key][$this->locale] = $value;

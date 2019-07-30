@@ -157,7 +157,9 @@ class EmailGridHandler extends BaseLocaleFileGridHandler {
 	protected function _getEmailData($request, &$emailData, &$referenceEmailData) {
 		$emailKey = $request->getUserVar('emailKey');
 		$emails = self::_getEmailTemplates($this->locale);
-		$referenceEmails = self::_getEmailTemplates(MASTER_LOCALE);
+		$session = $request->getSession();
+		$userLocale = $session->getSessionVar('currentLocale');
+		$referenceEmails = self::_getEmailTemplates($userLocale);
 		if (isset($referenceEmails[$emailKey])) {
 			$referenceEmailData = $referenceEmails[$emailKey];
 			if (isset($emails[$emailKey])) {
